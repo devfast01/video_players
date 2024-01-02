@@ -1,0 +1,56 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    lifecycle = '2.3.0'
+    glide = "4.13.2"
+    constraint_layout = '2.1.4'
+    material = "1.3.0"
+    fragment  = "1.5.0"
+    activity = "1.2.0"
+    recycler = "1.2.1"
+    appCompat = "1.2.0"
+    coreKTX = "1.5.0"
+
+    //compilation
+    compileVersion = 33
+    minVersion = 21
+    verCode = 1
+    verName = "1.0.0"
+    testRunner = "androidx.test.runner.AndroidJUnitRunner"
+}
+
+buildscript {
+    ext.kotlin_version = '1.6.20'
+    ext.anko_version='0.10.1'
+
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jcenter.bintray.com/'}
+        maven {url 'https://maven.google.com'}
+        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.3.1"
+        classpath 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jcenter.bintray.com/' }
+        jcenter() // Warning: this repository is going to shut down soon
+        maven {url 'https://maven.google.com'}
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
