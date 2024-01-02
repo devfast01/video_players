@@ -11,17 +11,20 @@
         android:icon="@drawable/baseline_play_circle_outline_24"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.For_peykam"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".nativePlayer"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".My_Player"
+            android:exported="false" />
+        <!-- <activity -->
+        <!-- android:name=".nativePlayer" -->
+        <!-- android:exported="false" /> -->
         <!-- <activity -->
         <!-- android:name=".fullScreen_example" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".fullScreen_example"
+            android:name=".nativePlayer"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
