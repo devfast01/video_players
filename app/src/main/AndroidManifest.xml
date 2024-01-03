@@ -14,9 +14,9 @@
         android:theme="@style/Theme.For_peykam"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".My_Player"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".My_Player"-->
+<!--            android:exported="false" />-->
         <!-- <activity -->
         <!-- android:name=".nativePlayer" -->
         <!-- android:exported="false" /> -->
@@ -24,7 +24,7 @@
         <!-- android:name=".fullScreen_example" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".nativePlayer"
+            android:name=".My_Player"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
