@@ -7,16 +7,12 @@
     tools:context=".My_Player">
 
 
-    <com.google.android.exoplayer2.ui.StyledPlayerView
+    <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
         android:layout_height="378dp"
         android:layout_marginTop="50dp"
-        android:focusable="true"
-        tools:ignore="MissingClass"
         app:controller_layout_id="@layout/custom_controller"
-        tools:layout_editor_absoluteX="-1dp"
-        tools:layout_editor_absoluteY="103dp"/>
-
+        app:use_controller="true" />
 
 </RelativeLayout>

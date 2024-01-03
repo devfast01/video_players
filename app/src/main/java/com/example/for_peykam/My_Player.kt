@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.for_peykam
 
 import android.annotation.SuppressLint
@@ -5,18 +7,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.for_peykam.databinding.ActivityMyPlayerBinding
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.PlayerView
 
 @Suppress("DEPRECATION")
 class My_Player : AppCompatActivity() {
     private lateinit var binding:ActivityMyPlayerBinding
-
+    private var processbar: DefaultTimeBar? = null
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class My_Player : AppCompatActivity() {
         setContentView(binding.root)
 
         val playerView = findViewById<PlayerView>(R.id.player_view)
-        val processbar = findViewById<ProgressBar>(R.id.exo_progress)
+        processbar = findViewById(R.id.exo_progressBar)
         val btn_fullScreen = findViewById<ImageView>(R.id.imageViewFullScreen)
         val btn_lock = findViewById<ImageView>(R.id.imageViewLock)
 
@@ -39,9 +41,9 @@ class My_Player : AppCompatActivity() {
         simpleExoPlayer.addListener(object: Player.Listener{
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_BUFFERING){
-                    processbar.visibility = View.VISIBLE
+                    processbar!!.visibility = View.VISIBLE
                 }else if(playbackState == Player.STATE_READY){
-                    processbar.visibility = View.GONE
+                    processbar!!.visibility = View.GONE
                 }
             }
         })
