@@ -3,56 +3,108 @@
 package com.example.for_peykam
 
 import android.annotation.SuppressLint
-import android.net.Uri
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.for_peykam.databinding.ActivityMyPlayerBinding
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+
 
 @Suppress("DEPRECATION")
 class My_Player : AppCompatActivity() {
     private lateinit var binding:ActivityMyPlayerBinding
     private var processbar: DefaultTimeBar? = null
+    private lateinit var exoPlayer: ExoPlayer
+    private lateinit var dataSourceFactory: DataSource.Factory
+    var playerView: PlayerView? = null
+    var fullScreen: ImageView? = null
+    var isFullScreen = false
+    var player: SimpleExoPlayer? = null
+    var progressBar: ProgressBar? = null
+    private val isShowingTrackSelectionDialog = false
+    private var trackSelector: DefaultTrackSelector? = null
+
+    var speed = arrayOf("0.25x", "0.5x", "Normal", "1.5x", "2x")
+    var live_url = "https://auh.com.tm/uploads/videoContent/online_petek.mp4"
+
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val playerView = findViewById<PlayerView>(R.id.player_view)
+        playerView = findViewById(R.id.playerView)
         processbar = findViewById(R.id.exo_progressBar)
-        val btn_fullScreen = findViewById<ImageView>(R.id.imageViewFullScreen)
+        fullScreen = findViewById(R.id.imageViewFullScreen)
         val btn_lock = findViewById<ImageView>(R.id.imageViewLock)
 
-        val simpleExoPlayer = SimpleExoPlayer.Builder(this)
-            .setSeekBackIncrementMs(5000)
-            .setSeekForwardIncrementMs(5000)
+        trackSelector = DefaultTrackSelector(this)
+        player = SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector!!).build()
+
+        playerView!!.player = player;
+
+        dataSourceFactory = DefaultDataSource.Factory(this)
+
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri(nativePlayer.HLS_STATIC_URL))
+
+        val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+        exoPlayer = ExoPlayer.Builder(this)
+            .setMediaSourceFactory(mediaSourceFactory)
             .build()
+        exoPlayer.addMediaSource(mediaSource)
 
-        binding.playerView.player = simpleExoPlayer
-        binding.playerView.keepScreenOn = true
+        player!!.setMediaSource(mediaSource);
+        player!!.prepare();
+        player!!.setPlayWhenReady(true);
 
-        simpleExoPlayer.addListener(object: Player.Listener{
-            override fun onPlaybackStateChanged(playbackState: Int) {
-                if (playbackState == Player.STATE_BUFFERING){
-                    processbar!!.visibility = View.VISIBLE
-                }else if(playbackState == Player.STATE_READY){
-                    processbar!!.visibility = View.GONE
+
+        fullScreen!!.setOnClickListener {
+            if (isFullScreen) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+                if (supportActionBar != null) {
+                    supportActionBar!!.show()
                 }
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                val params = playerView!!.layoutParams as ConstraintLayout.LayoutParams
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                params.height =
+                    (200 * applicationContext.resources.displayMetrics.density).toInt()
+                playerView!!.layoutParams = params
+
+                //                    Toast.makeText(Details.this, "We are Now going back to normal mode.", Toast.LENGTH_SHORT).show();
+                isFullScreen = false
+            } else {
+                window.decorView.systemUiVisibility =
+                    (View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                if (supportActionBar != null) {
+                    supportActionBar!!.hide()
+                }
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                val params = playerView!!.layoutParams as ConstraintLayout.LayoutParams
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                playerView!!.layoutParams = params
+
+                //                    Toast.makeText(Details.this, "We are going to FullScreen Mode.", Toast.LENGTH_SHORT).show();
+                isFullScreen = true
             }
-        })
-
-        val videoSource = Uri.parse("https://auh.com.tm/uploads/videoContent/online_petek.mp4")
-        val mediaItem = MediaItem.fromUri(videoSource)
-        simpleExoPlayer.setMediaItem(mediaItem)
-        simpleExoPlayer.prepare()
-        simpleExoPlayer.play()
-
+        }
     }
 }
